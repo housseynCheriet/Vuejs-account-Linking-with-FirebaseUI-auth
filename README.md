@@ -1,8 +1,8 @@
 # DEMO
 
-[https://vuejs-firebase-web-login-with-phone-email-google-and-klwo4n9bu.vercel.app/login](https://vuejs-firebase-web-login-with-phone-email-google-and-klwo4n9bu.vercel.app/login)
+[https://vuejs-account-linking-with-firebase-ui-auth.vercel.app](https://vuejs-account-linking-with-firebase-ui-auth.vercel.app)
 
-[https://www.youtube.com/watch?v=I4Sllo39Lkg](https://www.youtube.com/watch?v=I4Sllo39Lkg)
+[https://www.youtube.com/watch?v=nw8gshODq20](https://www.youtube.com/watch?v=nw8gshODq20)
 
 
 
