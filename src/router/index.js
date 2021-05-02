@@ -1,25 +1,44 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../views/Home.vue'
+
+
+// 
+import { createRouter, createWebHistory } from "vue-router";
+import AuthGuard from './AuthGuard.js'
+import rouutes from './rouutes'
+
+const routerHistory = createWebHistory();
 
 const routes = [
   {
-    path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
-]
+      path: '/',
+      name: 'Home',
+      component: () => import("../components/User.vue"),
+      beforeEnter: AuthGuard
+    },
+    {
+      path: '/login',
+      name: 'Login',
+     component: () => import("../components/Login.vue"),
+      beforeEnter: AuthGuard //no if off
+    },
+    {
+      path: '/user/:uid',
+      name: 'User',
+    component: () => import("../components/User.vue"),
+      beforeEnter: AuthGuard //no if off
+    },
+   {
+      path: '/*',
+      redirect: '/login'
+   },{
+      path: '/hahahaahaahaaha',
+   children: rouutes
+   }
+  
+];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: routerHistory,
   routes
-})
+});
 
-export default router
+export default router;

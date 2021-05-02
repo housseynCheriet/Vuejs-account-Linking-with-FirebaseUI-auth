@@ -1,10 +1,23 @@
+// /src/app.vue
 <template>
   <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+    <GetInTouch />
+   <router-view></router-view>
   </div>
-  <router-view/>
 </template>
+
+
+<script>
+ import GetInTouch from './components/GetInTouch'
+  export default {
+    name: 'app',
+    components: {
+      GetInTouch
+    }  
+   
+     
+  }
+</script>
 
 <style lang="scss">
 #app {
