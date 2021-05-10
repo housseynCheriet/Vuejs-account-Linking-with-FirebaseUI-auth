@@ -5,7 +5,7 @@ var firebaseAuth=firebase.auth();
 
 export default (to, from, next) => {
 //console.log(store);
-console.log(to);
+//console.log(to);
   if (firebaseAuth.currentUser) {
 
   if(to.path=="/login")

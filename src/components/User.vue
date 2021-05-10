@@ -3,7 +3,10 @@
  
   <pre>
 <code id="userInfo">
-  <a v-if="auth" v-bind:href="'/user/'+uid">See this user</a>
+  <a v-if="auth" v-bind:href="'/user/'+uid">
+  <span v-if="pagelogin" >See this user</span>
+  <span v-else>"Hi I'm {{ username }}"</span>
+</a>
    {{userInfo}}
    <button @click="logout">Logout</button>
  </code>
@@ -14,6 +17,10 @@
 
 <script>
 	import firebase from "firebase/app";
+  import { mapGetters, mapActions } from "vuex";
+ /* console.log(
+    mapGetters()
+    )*/
 export default {
   name: "user",
   props:["fromLogin"],
@@ -21,21 +28,37 @@ export default {
       return {
       auth:false,
         userInfo:"",
-        uid:""
+        uid:"",
+        pagelogin:true,
+        username: "",
       }
-    }
+    },
+  computed: {
+    ...mapGetters({ User: "StateUser" }),
+
+   /* ...mapState([
+            'user',
+        ])*/
+  }
     ,
-    created: function (){
- // console.log(this.fromLogin);
+    created:  function (){
+  console.log(this.User);
+  const proxy1 = new Proxy(this.User, {});
+  console.log({...proxy1});
+   console.log({...proxy1}.displayName);
+   this.username={...proxy1}.displayName;
   var user;
 if (firebase.auth().currentUser) {
    user=firebase.auth().currentUser.ac;
-            if(this.fromLogin!=1&&this.$route.params.uid!=user.uid)
+            if(this.fromLogin!=1){
+              this.pagelogin=false;
+              if(this.$route.params.uid!=user.uid)
               window.location.assign("/user/"+user.uid)
+            }
 
           this.auth=true;
           this.uid=user.uid;
-             this.userInfo = JSON.stringify({
+             this.userInfo = {
                 displayName: user.displayName,
                 email: user.email,
                 emailVerified: user.emailVerified,
@@ -44,10 +67,11 @@ if (firebase.auth().currentUser) {
                 uid: user.uid,
                 accessToken: user.accessToken,
                 providerData: user.providerData
-              }, null, '  ');
+              };
 
+  console.log(JSON.stringify(this.userInfo, null, '  '));
 
-  console.log(this.userInfo);
+ 
 
           } else {
             this.userInfo = "User is signed out.";
@@ -58,9 +82,11 @@ if (firebase.auth().currentUser) {
 
     },
     methods: {
+...mapActions(["LogOut"]),
       logout(e){
          e.preventDefault(); 
             firebase.auth().signOut().then(() => {
+              this.LogOut(); 
         this.$router.go("/login");
             });
          },

@@ -2,6 +2,7 @@
   <div>
   <div v-if="!auth">
   <div id="firebaseui-container"></div>  
+  <p v-if="showError" id="error">Error</p>
   </div>
   <div v-else>
   <User fromLogin="1" />
@@ -13,7 +14,7 @@
 import firebase from "firebase/app";
 import * as firebaseui from "firebaseui";
 import "firebaseui/dist/firebaseui.css";
-
+import { mapActions } from "vuex";
  import User from './User'
 export default {
   name: "Login",
@@ -27,13 +28,15 @@ export default {
       }
     },
     methods: {
+    ...mapActions(["Register","LogOut"]),
       logout(e){
          e.preventDefault(); 
             firebase.auth().signOut().then(() => {
+             this.LogOut(); 
         this.$router.go("/login");
             });
          },
-          callThis(){
+         async callThis(){
 
          var user;
            
@@ -41,7 +44,7 @@ if (firebase.auth().currentUser) {
   user=firebase.auth().currentUser.ac;
           this.auth=true;
           this.uid=user.uid;
-             this.userInfo = JSON.stringify({
+             this.userInfo = {
                 displayName: user.displayName,
                 email: user.email,
                 emailVerified: user.emailVerified,
@@ -50,9 +53,16 @@ if (firebase.auth().currentUser) {
                 uid: user.uid,
                 accessToken: user.accessToken,
                 providerData: user.providerData
-              }, null, '  ');
+              };
 
-  console.log(this.userInfo);
+  console.log(JSON.stringify(this.userInfo, null, '  '));
+
+  try {
+        await this.Register(this.userInfo);
+        this.showError = false
+      } catch (error) {
+        this.showError = true
+      }
 
        }   
         }
@@ -91,6 +101,10 @@ if (firebase.auth().currentUser) {
   }
 };
 </script>
-
+<style scoped>
+#error {
+  color: red;
+}
+</style>
 
 
